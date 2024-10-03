@@ -2,12 +2,12 @@ package Ejercicio4;
 
 public class Test {
     public static void main(String[] args) {
-        Atleta atleta1 = new Atleta(1);
-        Atleta atleta2 = new Atleta(2);
-        Atleta atleta3 = new Atleta(3);
+        Thread atleta1 = new Thread(new Atleta(1)) ;
+        Thread atleta2 = new Thread(new Atleta(2)) ;
+        Thread atleta3 = new Thread(new Atleta(3)) ;
 
-        atleta1.run();
-        atleta2.run();
-        atleta3.run();
+        atleta1.start();
+        atleta2.start();
+        atleta3.start();
     }
 }

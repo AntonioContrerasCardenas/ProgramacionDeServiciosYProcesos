@@ -1,9 +1,9 @@
-package Ejercicio2;
+package Ejercicio5;
 
 
 public class Test {
     public static void main(String[] args) {
-        Thread hilo = new Thread(new Hilo()) ;
+        HiloFibonacci hilo = new HiloFibonacci();
         hilo.start();
     }
 }
