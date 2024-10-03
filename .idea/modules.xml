@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HiloEjemplos/HiloEjemplos.iml" filepath="$PROJECT_DIR$/HiloEjemplos/HiloEjemplos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/ProgramacionDeServiciosYProcesos.iml" filepath="$PROJECT_DIR$/.idea/ProgramacionDeServiciosYProcesos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tema1Ejercicios/Tema1Ejercicios.iml" filepath="$PROJECT_DIR$/Tema1Ejercicios/Tema1Ejercicios.iml" />
+    </modules>
+  </component>
+</project>

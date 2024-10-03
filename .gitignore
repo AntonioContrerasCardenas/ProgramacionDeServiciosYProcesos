@@ -1,0 +1,29 @@
+        # Ignorar la carpeta .idea y sus archivos
+        .idea/
+        **/.idea/
+
+        # Ignorar archivos generados por IntelliJ
+        *.iml
+        *.ipr
+        *.iws
+
+        # Ignorar archivos de compilación de Java
+        /target/
+        /out/
+
+        # Ignorar archivos de dependencias de Gradle o Maven
+        .gradle/
+        build/
+        pom.xml
+
+        # Ignorar archivos de configuración específicos del entorno
+        *.log
+        *.class
+        *.jar
+
+        # Ignorar la carpeta de configuración de usuarios en Windows (si aplica)
+        *.user
+
+        # Ignorar archivos de configuración específicos de la IDE
+        .idea/workspace.xml
+        .idea/remote.xml
