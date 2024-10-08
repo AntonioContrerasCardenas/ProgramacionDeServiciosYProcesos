@@ -24,34 +24,53 @@ public class Factory {
             case EMPAQUETAELPRODUCTO -> {
                 empaquetaProducto();
             }
-
-            default -> {
-
-            }
         }
-        notifyAll();
     }
 
     private void empaquetaProducto() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+
+        while(!this.ensambleFinish) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-
+        sleep();
+        System.out.println("Producto empaquetado");
+        notifyAll();
     }
 
     private void ensamblaComponente() {
+
+        while(!this.baseFinish) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        sleep();
+        this.ensambleFinish = true;
+        System.out.println("Componente ensamblado");
+        notifyAll();
     }
 
     private void construyeBase() {
+
+        sleep();
+        this.baseFinish = true;
+        System.out.println("Base construida");
+        notifyAll();
+    }
+
+    public void sleep(){
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        this.baseFinish = true;
     }
 }

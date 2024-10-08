@@ -12,5 +12,9 @@ public class Main {
         Thread worker2 = new Thread(new Workers(factory, Tasks.EMPAQUETAELPRODUCTO));
         Thread worker3 = new Thread(new Workers(factory, Tasks.ENSAMBLACOMPONENTES));
 
+        worker3.start();
+        worker1.start();
+        worker2.start();
+
     }
 }

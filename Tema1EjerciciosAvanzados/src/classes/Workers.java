@@ -15,6 +15,7 @@ public class Workers implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Trabajador con cargo: " + task+", despierto");
         this.factory.work(this.task);
     }
 }
