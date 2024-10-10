@@ -9,7 +9,7 @@ import java.util.List;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        HiloMultiple[] vectorHilos = new HiloMultiple[10];
+        //HiloMultiple[] vectorHilos = new HiloMultiple[10];
 
         /*for (int i = 0; i < vectorHilos.length; i++) {
             vectorHilos[i] = new HiloMultiple("Hilo "+ i);
@@ -55,25 +55,35 @@ public class Main {
         grupo1.enumerate(vectorGrupo1);
         grupo2.enumerate(vectorGrupo2);
 
-        for (Thread hilo : vectorGrupo1){
-            try {
-                hilo.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        if(grupo1.activeCount() == 0)
-            System.out.println("Grupo1 terminado");
+        boolean finishGrupo1 = false, finishGrupo2 = false;
 
-        for (Thread hilo : vectorGrupo2){
-            try {
-                hilo.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
+        do{
+            if(grupo1.activeCount() == 0 && !finishGrupo1){
+                System.out.println("Primer grupo acabado");
+                finishGrupo1 = true;
             }
-        }
-        if(grupo2.activeCount() == 0)
-            System.out.println("Grupo2 terminado");
+
+            if(grupo2.activeCount() == 0 && !finishGrupo2){
+                System.out.println("Segundo grupo acabado");
+                finishGrupo2 = true;
+            }
+        }while(!finishGrupo1 || !finishGrupo2);
+
+//        for (Thread hilo : vectorGrupo1){
+//            try {
+//                hilo.join();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        for (Thread hilo : vectorGrupo2){
+//            try {
+//                hilo.join();
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
 
 
@@ -84,11 +94,11 @@ public class Main {
             HiloClase hilo = new HiloClase(i+ "ª" , grupo1);
             hilo.start();
 
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                Thread.sleep(1500);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         }
     }
 }
