@@ -2,12 +2,17 @@ package Ejercicio3.controlador;
 
 import Ejercicio3.modelo.Vehiculo;
 
-public class SupervisorCarrera implements Runnable{
+import java.util.List;
+import java.util.Random;
 
-    private Vehiculo[] vehiculos;
+public class SupervisorCarrera extends Thread{
 
-    public SupervisorCarrera(Vehiculo[] vehiculos){
+    private List<Vehiculo> vehiculos;
+    private Random random = new Random();
+
+    public SupervisorCarrera(List<Vehiculo> vehiculos){
         this.vehiculos = vehiculos;
+        this.setDaemon(true);
     }
 
     @Override
@@ -15,7 +20,9 @@ public class SupervisorCarrera implements Runnable{
         while (true){
             System.out.println("SupervisorCarrera ejecutando");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
+                Vehiculo vehiculoAccidentado = vehiculos.get(random.nextInt(vehiculos.size()));
+                vehiculoAccidentado.interrupt();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
