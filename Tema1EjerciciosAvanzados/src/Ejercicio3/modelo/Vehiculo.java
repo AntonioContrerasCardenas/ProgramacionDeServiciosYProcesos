@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class Vehiculo extends Thread implements Comparable<Vehiculo> {
 
-    private static final int DISTANCIA_RECORRER = 100;
+    private static final int DISTANCIA_RECORRER = 120;
     private final int velocidad;
     private int distanciaRecorrida = 0;
     private static final int DISTANCIASUMAR = 10;
@@ -37,14 +37,14 @@ public class Vehiculo extends Thread implements Comparable<Vehiculo> {
             }
         }
 
-        System.out.println(getName() + " ha terminado la carrera");
+        System.out.println(getName() + " HA TERMINADO LA CARRERA!!!!!");
     }
 
     private void accidenteVehiculo() {
         try {
-            System.out.println("Se averia el vehiculo " + getName());
+            System.out.println("<<<Se averia el vehiculo " + getName());
             sleep(2000);
-            System.out.println("Se repara el vehiculo " + getName());
+            System.out.println(">>Se repara el vehiculo " + getName());
 
         } catch (InterruptedException e) {
             e.printStackTrace();

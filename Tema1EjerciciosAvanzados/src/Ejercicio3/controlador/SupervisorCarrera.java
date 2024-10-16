@@ -23,6 +23,7 @@ public class SupervisorCarrera extends Thread{
                 Vehiculo vehiculoAccidentado = vehiculos.get(random.nextInt(vehiculos.size()));
 
                 if(vehiculoAccidentado.isAlive() && !vehiculoAccidentado.isInterrupted()){
+                    System.out.println("Se averia el vehiculo " + vehiculoAccidentado.getName());
                     vehiculoAccidentado.interrupt();
                 }
             } catch (InterruptedException e) {
