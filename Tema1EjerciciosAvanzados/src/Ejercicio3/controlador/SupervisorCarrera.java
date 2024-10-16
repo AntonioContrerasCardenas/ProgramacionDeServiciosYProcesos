@@ -18,11 +18,13 @@ public class SupervisorCarrera extends Thread{
     @Override
     public void run() {
         while (true){
-            System.out.println("SupervisorCarrera ejecutando");
             try {
                 Thread.sleep(5000);
                 Vehiculo vehiculoAccidentado = vehiculos.get(random.nextInt(vehiculos.size()));
-                vehiculoAccidentado.interrupt();
+
+                if(vehiculoAccidentado.isAlive() && !vehiculoAccidentado.isInterrupted()){
+                    vehiculoAccidentado.interrupt();
+                }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

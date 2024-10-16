@@ -8,7 +8,7 @@ public class Vehiculo extends Thread implements Comparable<Vehiculo> {
     private final int velocidad;
     private int distanciaRecorrida = 0;
     private static final int DISTANCIASUMAR = 10;
-    private boolean accidente = false;
+    private boolean averiado = false;
 
     public Vehiculo(String name, int velocidad){
         super(name);
@@ -21,13 +21,34 @@ public class Vehiculo extends Thread implements Comparable<Vehiculo> {
         while(distanciaRecorrida < DISTANCIA_RECORRER){
             try {
                 sleep(velocidad);
+                System.out.println(getName() + ", lleva recorrido " + distanciaRecorrida +"m");
+                distanciaRecorrida += DISTANCIASUMAR;
             } catch (InterruptedException e) {
-                System.out.println("Vehiculo " + getName() + " interrumpido");
+//                if (!averiado){
+//                    averiado = true;
+//                    System.out.println("Se averia el vehiculo " + getName());
+//                }else{
+//                    System.out.println("Se repara el vehiculo " + getName());
+//                    averiado = false;
+//                }
+                accidenteVehiculo();
+
+
             }
-            distanciaRecorrida += 10;
         }
 
         System.out.println(getName() + " ha terminado la carrera");
+    }
+
+    private void accidenteVehiculo() {
+        try {
+            System.out.println("Se averia el vehiculo " + getName());
+            sleep(2000);
+            System.out.println("Se repara el vehiculo " + getName());
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
