@@ -15,15 +15,28 @@ public class Main {
         listaProductos.add(new Producto("Producto 1"));
         listaProductos.add(new Producto("Producto 2"));
         listaProductos.add(new Producto("Producto 3"));
+        listaProductos.add(new Producto("Producto 4"));
+        listaProductos.add(new Producto("Producto 5"));
+        listaProductos.add(new Producto("Producto 6"));
 
         Factory factory = new Factory(listaProductos);
-        Thread worker1 = new Thread(new Workers(factory, Tasks.CONSTRUIRBASE));
-        Thread worker2 = new Thread(new Workers(factory, Tasks.EMPAQUETAELPRODUCTO));
-        Thread worker3 = new Thread(new Workers(factory, Tasks.ENSAMBLACOMPONENTES));
+//        Thread worker1 = new Thread(new Workers(factory, Tasks.CONSTRUIRBASE));
+//        Thread worker2 = new Thread(new Workers(factory, Tasks.EMPAQUETAELPRODUCTO));
+//        Thread worker3 = new Thread(new Workers(factory, Tasks.ENSAMBLACOMPONENTES));
+//
+//        worker1.start();
+//        worker3.start();
+//        worker2.start();
 
-        worker3.start();
-        worker1.start();
-        worker2.start();
+        for (Producto producto : listaProductos){
+            Workers trabajadroBase = new Workers(factory,Tasks.CONSTRUIRBASE, producto);
+            Workers trabajadroEnsamble = new Workers(factory,Tasks.ENSAMBLACOMPONENTES, producto);
+            Workers trabajadroEmpaqueta = new Workers(factory,Tasks.EMPAQUETAELPRODUCTO, producto);
+
+            trabajadroBase.start();
+            trabajadroEnsamble.start();
+            trabajadroEmpaqueta.start();
+        }
 
     }
 }
