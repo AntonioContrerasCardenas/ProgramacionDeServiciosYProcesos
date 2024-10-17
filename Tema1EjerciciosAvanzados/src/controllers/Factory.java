@@ -1,30 +1,38 @@
 package controllers;
 
+import classes.Producto;
 import enums.Tasks;
+
+import java.util.List;
 
 public class Factory {
     private boolean baseFinish;
     private boolean ensambleFinish;
+    private List<Producto> listaProductos;
 
-    public Factory(){
+    public Factory(List<Producto> listaProductos){
+        this.listaProductos = listaProductos;
         this.baseFinish = false;
         this.ensambleFinish = false;
     }
 
     public synchronized void work(Tasks tasks){
-        switch (tasks){
-            case CONSTRUIRBASE -> {
-                construyeBase();
+
+            switch (tasks){
+                case CONSTRUIRBASE -> {
+                    construyeBase();
+                }
+
+                case ENSAMBLACOMPONENTES -> {
+                    ensamblaComponente();
+                }
+
+                case EMPAQUETAELPRODUCTO -> {
+                    empaquetaProducto();
+                }
             }
 
-            case ENSAMBLACOMPONENTES -> {
-                ensamblaComponente();
-            }
 
-            case EMPAQUETAELPRODUCTO -> {
-                empaquetaProducto();
-            }
-        }
     }
 
     private void empaquetaProducto() {
@@ -54,7 +62,7 @@ public class Factory {
 
         sleep();
         this.ensambleFinish = true;
-        System.out.println("Componente ensamblado");
+        System.out.println("Componentes ensamblados");
         notifyAll();
     }
 
