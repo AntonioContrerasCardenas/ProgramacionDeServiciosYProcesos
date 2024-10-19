@@ -1,48 +1,76 @@
 package controllers;
 
 import classes.Producto;
+import classes.Workers;
 import enums.Tasks;
 
+import java.util.LinkedList;
 import java.util.List;
-
+import java.util.Queue;
 public class Factory {
-    private boolean baseFinish;
-    private boolean ensambleFinish;
-    private List<Producto> listaProductos;
+    private Queue<Producto> listaProductosBaseConstruir = new LinkedList<>();
+    private Queue<Producto> listaProductosEnsamblar = new LinkedList<>();
+    private Queue<Producto> listaProductosEmpaquetar = new LinkedList<>();
 
-    public Factory(List<Producto> listaProductos){
-        this.listaProductos = listaProductos;
-        this.baseFinish = false;
-        this.ensambleFinish = false;
+    public Factory(List<Producto> listaProductos) {
+        listaProductosBaseConstruir.addAll(listaProductos);
     }
 
-//    public synchronized void work(Tasks tasks){
-//
-//        for (Producto producto : listaProductos) {
-//            switch (tasks) {
-//                case CONSTRUIRBASE -> {
-//                    construyeBase(producto);
-//                }
-//
-//                case ENSAMBLACOMPONENTES -> {
-//                    ensamblaComponente(producto);
-//                }
-//
-//                case EMPAQUETAELPRODUCTO -> {
-//                    empaquetaProducto(producto);
-//                }
-//            }
-//        }
-//
-//    }
+    public synchronized Producto getProductosBaseConstruir() {
+        return listaProductosBaseConstruir.poll();
+    }
+
+    public synchronized Producto getProductosEnsamblar() {
+        return listaProductosEnsamblar.poll();
+    }
+
+    public synchronized Producto getProductosEmpaquetar() {
+        return listaProductosEmpaquetar.poll();
+    }
+
+    public synchronized void addProductosEnsamblar(Producto producto) {
+        listaProductosEnsamblar.add(producto);
+        notifyAll(); // Notifica a otros hilos que un producto está listo para ensamblar
+    }
+
+    public synchronized void addProductosEmpaquetar(Producto producto) {
+        listaProductosEmpaquetar.add(producto);
+        notifyAll(); // Notifica a otros hilos que un producto está listo para empaquetar
+    }
+
+    public synchronized void construyeBase(Producto producto) {
+        sleep();
+        producto.setBaseConstruida(true);
+        producto.setEstado("Base construida");
+        System.out.println(producto.getNombre() + " con base construida");
+        this.addProductosEnsamblar(producto); // Mueve el producto a la cola de ensamblado
+        notifyAll();
+    }
+
+    public synchronized void ensamblaComponente(Producto producto) {
+        System.out.println("Ensamblando componentes");
+        while (!producto.isBaseConstruida()) {
+            try {
+                wait(); // Espera a que la base esté construida
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        sleep();
+        producto.setEnsamble(true);
+        producto.setEstado("Componentes ensamblados");
+        System.out.println(producto.getNombre() + " con componentes ensamblados");
+        this.addProductosEmpaquetar(producto); // Mueve el producto a la cola de empaquetado
+        notifyAll();
+    }
 
     public synchronized void empaquetaProducto(Producto producto) {
-
-        while(!producto.isEnsamble()) {
+        while (!producto.isEnsamble()) {
             try {
-                wait();
+                wait(); // Espera a que el ensamblaje esté completo
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
             }
         }
 
@@ -51,56 +79,19 @@ public class Factory {
         producto.setEstado("Producto empaquetado");
         System.out.println(producto.getNombre() + " empaquetado");
         notifyAll();
-
-//        sleep();
-//        producto.setEstado("Producto empaquetado");
-//        System.out.println(producto.getNombre() + " empaquetado");
-//        notifyAll();
     }
 
-    public synchronized void ensamblaComponente(Producto producto) {
-
-        while(!producto.isBaseConstruida()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        sleep();
-        producto.setEnsamble(true);
-        producto.setEstado("Componentes ensamblados");
-        System.out.println(producto.getNombre() + " con componentes ensamblados");
-        notifyAll();
-
-//        sleep();
-//        this.ensambleFinish = true;
-//        producto.setEstado("Componentes ensamblados");
-//        System.out.println(producto.getNombre() + " con componentes ensamblados");
-//        notifyAll();
-    }
-
-    public synchronized void construyeBase(Producto producto) {
-
-        sleep();
-        producto.setBaseConstruida(true);
-        producto.setEstado("Base construida");
-        System.out.println(producto.getNombre() + " con base construida");
-        notifyAll();
-
-//        sleep();
-//        this.baseFinish = true;
-//        producto.setEstado("Base construida");
-//        System.out.println(producto.getNombre() + " con base construida");
-//        notifyAll();
-    }
-
-    public void sleep(){
+    public void sleep() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
+    }
+
+    public void startWorkers() {
+        new Workers(this, Tasks.CONSTRUIRBASE).start();
+        new Workers(this, Tasks.ENSAMBLACOMPONENTES).start();
+        new Workers(this, Tasks.EMPAQUETAELPRODUCTO).start();
     }
 }

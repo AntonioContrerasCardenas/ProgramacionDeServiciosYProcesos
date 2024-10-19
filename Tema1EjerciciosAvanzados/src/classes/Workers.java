@@ -6,21 +6,58 @@ import enums.Tasks;
 public class Workers extends Thread{
 
     private Tasks task;
-    private Factory factory;
-    private Producto producto;
+    private final Factory factory;
 
-    public Workers(Factory factory,Tasks task, Producto producto){
+    public Workers(Factory factory,Tasks task){
         this.task = task;
         this.factory = factory;
-        this.producto = producto;
     }
 
     @Override
     public void run() {
-        switch (task) {
-            case CONSTRUIRBASE -> this.factory.construyeBase(producto);
-            case EMPAQUETAELPRODUCTO -> this.factory.empaquetaProducto(producto);
-            case ENSAMBLACOMPONENTES -> this.factory.ensamblaComponente(producto);
+        while (true) switch (task) {
+            case CONSTRUIRBASE -> {
+                Producto producto = factory.getProductosBaseConstruir();
+                if (producto == null) {
+                    waitFactories();
+                }else{
+                    this.factory.construyeBase(producto);
+                }
+            }
+            case EMPAQUETAELPRODUCTO -> {
+                    while (true) {
+                        System.out.println("IIIIIIII");
+
+                        Producto producto = factory.getProductosEmpaquetar();
+                        if (producto != null)
+                            this.factory.empaquetaProducto(producto);
+
+
+                    }
+
+
+            }
+            case ENSAMBLACOMPONENTES -> {
+
+                    Producto producto = factory.getProductosEnsamblar();
+                    if (producto == null) {
+                        waitFactories();
+                    }else{
+                        this.factory.ensamblaComponente(producto);
+                    }
+
+            }
+        }
+
+    }
+
+    private void waitFactories() {
+        synchronized (factory){
+            try {
+                factory.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
