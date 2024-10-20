@@ -7,6 +7,7 @@ import enums.Tasks;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+
 public class Factory {
     private Queue<Producto> listaProductosBaseConstruir = new LinkedList<>();
     private Queue<Producto> listaProductosEnsamblar = new LinkedList<>();
@@ -17,68 +18,99 @@ public class Factory {
     }
 
     public synchronized Producto getProductosBaseConstruir() {
+        while (listaProductosBaseConstruir.isEmpty()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
         return listaProductosBaseConstruir.poll();
     }
 
     public synchronized Producto getProductosEnsamblar() {
+        while (listaProductosEnsamblar.isEmpty()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
         return listaProductosEnsamblar.poll();
     }
 
     public synchronized Producto getProductosEmpaquetar() {
+        while (listaProductosEmpaquetar.isEmpty()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
         return listaProductosEmpaquetar.poll();
     }
 
     public synchronized void addProductosEnsamblar(Producto producto) {
         listaProductosEnsamblar.add(producto);
-        notifyAll(); // Notifica a otros hilos que un producto está listo para ensamblar
+        //notifyAll(); // Notifica a otros hilos que un producto está listo para ensamblar
+        notify();
     }
 
     public synchronized void addProductosEmpaquetar(Producto producto) {
         listaProductosEmpaquetar.add(producto);
-        notifyAll(); // Notifica a otros hilos que un producto está listo para empaquetar
+        //notifyAll(); // Notifica a otros hilos que un producto está listo para empaquetar
+        notify();
     }
 
-    public synchronized void construyeBase(Producto producto) {
+    public void construyeBase(Producto producto) {
         sleep();
         producto.setBaseConstruida(true);
         producto.setEstado("Base construida");
         System.out.println(producto.getNombre() + " con base construida");
-        this.addProductosEnsamblar(producto); // Mueve el producto a la cola de ensamblado
-        notifyAll();
+
+        synchronized (this) {
+            this.addProductosEnsamblar(producto); // Mueve el producto a la cola de ensamblado
+            notifyAll();
+        }
     }
 
     public synchronized void ensamblaComponente(Producto producto) {
-        System.out.println("Ensamblando componentes");
-        while (!producto.isBaseConstruida()) {
-            try {
-                wait(); // Espera a que la base esté construida
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+
+//        while (!producto.isBaseConstruida()) {
+//            try {
+//                wait(); // Espera a que la base esté construida
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//            }
+//        }
 
         sleep();
         producto.setEnsamble(true);
         producto.setEstado("Componentes ensamblados");
         System.out.println(producto.getNombre() + " con componentes ensamblados");
-        this.addProductosEmpaquetar(producto); // Mueve el producto a la cola de empaquetado
-        notifyAll();
+
+        //notifyAll();
+
+        synchronized (this) {
+            this.addProductosEmpaquetar(producto); // Mueve el producto a la cola de empaquetado
+            notifyAll();
+        }
     }
 
     public synchronized void empaquetaProducto(Producto producto) {
-        while (!producto.isEnsamble()) {
-            try {
-                wait(); // Espera a que el ensamblaje esté completo
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+//        while (!producto.isEnsamble()) {
+//            try {
+//                wait(); // Espera a que el ensamblaje esté completo
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//            }
+//        }
 
         sleep();
         producto.setEmpaquetado(true);
         producto.setEstado("Producto empaquetado");
         System.out.println(producto.getNombre() + " empaquetado");
-        notifyAll();
+        //notifyAll();
     }
 
     public void sleep() {
