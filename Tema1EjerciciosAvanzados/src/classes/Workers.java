@@ -15,55 +15,29 @@ public class Workers extends Thread {
 
     @Override
     public void run() {
-        while (true) switch (task) {
+        while (!factory.isTrabajoAcabado()) switch (task) {
             case CONSTRUIRBASE -> {
                 Producto producto = factory.getProductosBaseConstruir();
-//                if (producto == null) {
-//                    waitFactories();
-//                }else{
-//                    this.factory.construyeBase(producto);
-//                }
                 if (producto != null) {
                     this.factory.construyeBase(producto);
                 }
             }
             case EMPAQUETAELPRODUCTO -> {
-
                 Producto producto = factory.getProductosEmpaquetar();
                 if (producto != null) {
                     this.factory.empaquetaProducto(producto);
                 }
-//                        if (producto == null) {
-//                            waitFactories();
-//                        }else{
-//                            this.factory.empaquetaProducto(producto);
-//                        }
 
             }
             case ENSAMBLACOMPONENTES -> {
-
                 Producto producto = factory.getProductosEnsamblar();
                 if (producto != null) {
                     this.factory.ensamblaComponente(producto);
                 }
-//                    if (producto == null) {
-//                        waitFactories();
-//                    }else{
-//                        this.factory.ensamblaComponente(producto);
-//                    }
 
             }
         }
 
     }
 
-    private synchronized void waitFactories() {
-
-        try {
-            wait();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 }

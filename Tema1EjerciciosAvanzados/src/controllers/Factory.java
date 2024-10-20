@@ -12,8 +12,12 @@ public class Factory {
     private Queue<Producto> listaProductosBaseConstruir = new LinkedList<>();
     private Queue<Producto> listaProductosEnsamblar = new LinkedList<>();
     private Queue<Producto> listaProductosEmpaquetar = new LinkedList<>();
+    boolean isTrabajoAcabado = false;
+    static int totalProductos = 0;
+    static int contador = 0;
 
     public Factory(List<Producto> listaProductos) {
+        totalProductos = listaProductos.size();
         listaProductosBaseConstruir.addAll(listaProductos);
     }
 
@@ -25,6 +29,7 @@ public class Factory {
                 Thread.currentThread().interrupt();
             }
         }
+        //notifyAll();
         return listaProductosBaseConstruir.poll();
     }
 
@@ -36,6 +41,7 @@ public class Factory {
                 Thread.currentThread().interrupt();
             }
         }
+        //notifyAll();
         return listaProductosEnsamblar.poll();
     }
 
@@ -47,19 +53,18 @@ public class Factory {
                 Thread.currentThread().interrupt();
             }
         }
+        //notifyAll();
         return listaProductosEmpaquetar.poll();
     }
 
     public synchronized void addProductosEnsamblar(Producto producto) {
         listaProductosEnsamblar.add(producto);
-        //notifyAll(); // Notifica a otros hilos que un producto está listo para ensamblar
-        notify();
+        notifyAll();
     }
 
     public synchronized void addProductosEmpaquetar(Producto producto) {
         listaProductosEmpaquetar.add(producto);
-        //notifyAll(); // Notifica a otros hilos que un producto está listo para empaquetar
-        notify();
+        notifyAll();
     }
 
     public void construyeBase(Producto producto) {
@@ -67,50 +72,30 @@ public class Factory {
         producto.setBaseConstruida(true);
         producto.setEstado("Base construida");
         System.out.println(producto.getNombre() + " con base construida");
-
-        synchronized (this) {
-            this.addProductosEnsamblar(producto); // Mueve el producto a la cola de ensamblado
-            notifyAll();
-        }
+        this.addProductosEnsamblar(producto);
+//        synchronized (this) {
+//            this.addProductosEnsamblar(producto);
+//        }
     }
 
     public synchronized void ensamblaComponente(Producto producto) {
-
-//        while (!producto.isBaseConstruida()) {
-//            try {
-//                wait(); // Espera a que la base esté construida
-//            } catch (InterruptedException e) {
-//                Thread.currentThread().interrupt();
-//            }
-//        }
-
         sleep();
         producto.setEnsamble(true);
         producto.setEstado("Componentes ensamblados");
         System.out.println(producto.getNombre() + " con componentes ensamblados");
+        this.addProductosEmpaquetar(producto);
 
-        //notifyAll();
-
-        synchronized (this) {
-            this.addProductosEmpaquetar(producto); // Mueve el producto a la cola de empaquetado
-            notifyAll();
-        }
     }
 
     public synchronized void empaquetaProducto(Producto producto) {
-//        while (!producto.isEnsamble()) {
-//            try {
-//                wait(); // Espera a que el ensamblaje esté completo
-//            } catch (InterruptedException e) {
-//                Thread.currentThread().interrupt();
-//            }
-//        }
-
         sleep();
         producto.setEmpaquetado(true);
         producto.setEstado("Producto empaquetado");
-        System.out.println(producto.getNombre() + " empaquetado");
-        //notifyAll();
+        System.out.println(producto.getNombre() + " EMPAQUETADO");
+        contador++;
+        if(totalProductos == contador){
+            isTrabajoAcabado = true;
+        }
     }
 
     public void sleep() {
@@ -125,5 +110,9 @@ public class Factory {
         new Workers(this, Tasks.CONSTRUIRBASE).start();
         new Workers(this, Tasks.ENSAMBLACOMPONENTES).start();
         new Workers(this, Tasks.EMPAQUETAELPRODUCTO).start();
+    }
+
+    public boolean isTrabajoAcabado() {
+        return isTrabajoAcabado;
     }
 }

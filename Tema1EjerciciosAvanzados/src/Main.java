@@ -23,14 +23,6 @@ public class Main {
 
         factory.startWorkers();
 
-//            Workers trabajadroBase = new Workers(factory,Tasks.CONSTRUIRBASE, producto);
-//            Workers trabajadroEnsamble = new Workers(factory,Tasks.ENSAMBLACOMPONENTES, producto);
-//            Workers trabajadroEmpaqueta = new Workers(factory,Tasks.EMPAQUETAELPRODUCTO, producto);
-//
-//            trabajadroBase.start();
-//            trabajadroEnsamble.start();
-//            trabajadroEmpaqueta.start();
-//
 
     }
 }
