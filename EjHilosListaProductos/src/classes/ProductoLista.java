@@ -12,7 +12,7 @@ public class ProductoLista {
 
     public ProductoLista(String nombre) {
         this.nombre = nombre;
-        this.estadoActual = Tasks.CONSTRUIRBASE;  // Inicialmente, todos los productos comienzan en la fase de construcción.
+        this.estadoActual = Tasks.INICIANDO;
     }
 
     public String getNombre() {

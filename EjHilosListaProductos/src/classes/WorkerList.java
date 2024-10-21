@@ -1,6 +1,5 @@
 package classes;
 
-import controllers.Factory;
 import controllers.FactoryList;
 import enums.Tasks;
 

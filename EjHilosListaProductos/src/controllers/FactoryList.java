@@ -1,6 +1,5 @@
 package controllers;
 
-import classes.Producto;
 import classes.ProductoLista;
 import classes.WorkerList;
 import enums.Tasks;
@@ -17,18 +16,30 @@ public class FactoryList {
     }
 
     public synchronized ProductoLista getProducto(Tasks task) {
-        while (listaProductos.stream().noneMatch(p -> p.getEstadoActual() == task)) {
+        while(!hayProductoConTarea(task)){
             try {
                 wait();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        // Devuelve el primer producto que está en la tarea solicitada
-        return listaProductos.stream()
-                .filter(p -> p.getEstadoActual() == task)
-                .findFirst()
-                .orElse(null);
+
+        for (ProductoLista producto : listaProductos) {
+            if (producto.getEstadoActual() == task) {
+                return producto;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean hayProductoConTarea(Tasks task) {
+        for (ProductoLista producto : listaProductos) {
+            if (producto.getEstadoActual() == task) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public synchronized void avanzarTarea(ProductoLista producto) {
@@ -38,7 +49,7 @@ public class FactoryList {
     public void construyeBase(ProductoLista producto) {
         sleep();
         producto.setBaseConstruida(true);
-        producto.setEstadoActual(Tasks.ENSAMBLACOMPONENTES);
+        producto.setEstadoActual(Tasks.CONSTRUIRBASE);
         System.out.println(producto.getNombre() + " con base construida");
         avanzarTarea(producto);
     }
@@ -46,7 +57,7 @@ public class FactoryList {
     public void ensamblaComponente(ProductoLista producto) {
         sleep();
         producto.setEnsamble(true);
-        producto.setEstadoActual(Tasks.EMPAQUETAELPRODUCTO);
+        producto.setEstadoActual(Tasks.ENSAMBLACOMPONENTES);
         System.out.println(producto.getNombre() + " con componentes ensamblados");
         avanzarTarea(producto);
     }
@@ -78,8 +89,8 @@ public class FactoryList {
     }
 
     public void startWorkers() {
+        new WorkerList(this, Tasks.INICIANDO).start();
         new WorkerList(this, Tasks.CONSTRUIRBASE).start();
         new WorkerList(this, Tasks.ENSAMBLACOMPONENTES).start();
-        new WorkerList(this, Tasks.EMPAQUETAELPRODUCTO).start();
     }
 }

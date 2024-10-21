@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/EjHilosListaProductos/EjHilosListaProductos.iml" filepath="$PROJECT_DIR$/EjHilosListaProductos/EjHilosListaProductos.iml" />
       <module fileurl="file://$PROJECT_DIR$/HiloEjemplos/HiloEjemplos.iml" filepath="$PROJECT_DIR$/HiloEjemplos/HiloEjemplos.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ProgramacionDeServiciosYProcesos.iml" filepath="$PROJECT_DIR$/.idea/ProgramacionDeServiciosYProcesos.iml" />
       <module fileurl="file://$PROJECT_DIR$/Tema1Ejercicios/Tema1Ejercicios.iml" filepath="$PROJECT_DIR$/Tema1Ejercicios/Tema1Ejercicios.iml" />
