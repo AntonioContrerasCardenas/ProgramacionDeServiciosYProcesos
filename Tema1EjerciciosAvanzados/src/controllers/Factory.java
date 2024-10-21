@@ -94,8 +94,12 @@ public class Factory {
         System.out.println(producto.getNombre() + " EMPAQUETADO");
         contador++;
         if(totalProductos == contador){
-            isTrabajoAcabado = true;
+            setTrabajoAcabado(true);
         }
+    }
+
+    public void setTrabajoAcabado(boolean trabajoAcabado) {
+        isTrabajoAcabado = trabajoAcabado;
     }
 
     public void sleep() {
