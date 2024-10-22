@@ -10,21 +10,42 @@ public class FactoryList {
     private final List<ProductoLista> listaProductos;
     private boolean isTrabajoAcabado = false;
     private static int contador = 0;
+    private static int contadorBase = 0;
+    private static int total = 0;
 
     public FactoryList(List<ProductoLista> listaProductos) {
         this.listaProductos = listaProductos;
+        total = listaProductos.size();
     }
 
+    public static int getTotal() {
+        return total;
+    }
 
+    public static void setTotal(int total) {
+        FactoryList.total = total;
+    }
+
+    public static int getContadorBase() {
+        return contadorBase;
+    }
+
+    public static void setContadorBase(int contadorBase) {
+        FactoryList.contadorBase = contadorBase;
+    }
 
     public synchronized ProductoLista getProducto(Tasks task) {
         if(isTrabajoAcabado()){
+            notifyAll();
             return null;
         }
 
         while(!hayProductoConTarea(task)){
             try {
                 wait();
+                if(isTrabajoAcabado()){
+                    notifyAll();
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -40,6 +61,10 @@ public class FactoryList {
     }
 
     private boolean hayProductoConTarea(Tasks task) {
+        if(isTrabajoAcabado()){
+            notifyAll();
+            return false;
+        }
         for (ProductoLista producto : listaProductos) {
             if (producto.getEstadoActual() == task) {
                 return true;
@@ -57,6 +82,7 @@ public class FactoryList {
         producto.setBaseConstruida(true);
         producto.setEstadoActual(Tasks.ENSAMBLACOMPONENTES);
         producto.setProducto("construido");
+        contadorBase++;
         //System.out.println(producto.getNombre() + " con base construida");
         System.out.println(producto.getCadena());
         avanzarTarea(producto);
@@ -72,7 +98,7 @@ public class FactoryList {
         avanzarTarea(producto);
     }
 
-    public void empaquetaProducto(ProductoLista producto) {
+    public synchronized void empaquetaProducto(ProductoLista producto) {
         sleep();
         producto.setEmpaquetado(true);
         producto.setEstadoActual(Tasks.FINALIZADO);
@@ -82,6 +108,7 @@ public class FactoryList {
         contador++;
         if (contador == listaProductos.size()) {
             setTrabajoAcabado(true);
+            notifyAll();
         }
     }
 
