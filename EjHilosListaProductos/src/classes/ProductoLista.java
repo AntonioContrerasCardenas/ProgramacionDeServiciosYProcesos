@@ -12,7 +12,17 @@ public class ProductoLista {
 
     public ProductoLista(String nombre) {
         this.nombre = nombre;
-        this.estadoActual = Tasks.INICIANDO;
+        this.estadoActual = Tasks.CONSTRUIRBASE;
+        this.cadena = new StringBuilder();
+        this.cadena.append(nombre).append(": ");
+    }
+
+    public void setProducto(String cadena){
+        this.cadena.append("...").append(cadena);
+    }
+
+    public StringBuilder getCadena() {
+        return cadena;
     }
 
     public String getNombre() {

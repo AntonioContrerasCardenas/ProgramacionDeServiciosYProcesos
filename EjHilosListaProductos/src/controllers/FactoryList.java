@@ -15,7 +15,13 @@ public class FactoryList {
         this.listaProductos = listaProductos;
     }
 
+
+
     public synchronized ProductoLista getProducto(Tasks task) {
+        if(isTrabajoAcabado()){
+            return null;
+        }
+
         while(!hayProductoConTarea(task)){
             try {
                 wait();
@@ -49,23 +55,30 @@ public class FactoryList {
     public void construyeBase(ProductoLista producto) {
         sleep();
         producto.setBaseConstruida(true);
-        producto.setEstadoActual(Tasks.CONSTRUIRBASE);
-        System.out.println(producto.getNombre() + " con base construida");
+        producto.setEstadoActual(Tasks.ENSAMBLACOMPONENTES);
+        producto.setProducto("construido");
+        //System.out.println(producto.getNombre() + " con base construida");
+        System.out.println(producto.getCadena());
         avanzarTarea(producto);
     }
 
     public void ensamblaComponente(ProductoLista producto) {
         sleep();
         producto.setEnsamble(true);
-        producto.setEstadoActual(Tasks.ENSAMBLACOMPONENTES);
-        System.out.println(producto.getNombre() + " con componentes ensamblados");
+        producto.setEstadoActual(Tasks.EMPAQUETAELPRODUCTO);
+        producto.setProducto("ensamblado");
+        //System.out.println(producto.getNombre() + " con componentes ensamblados");
+        System.out.println(producto.getCadena());
         avanzarTarea(producto);
     }
 
     public void empaquetaProducto(ProductoLista producto) {
         sleep();
         producto.setEmpaquetado(true);
-        System.out.println(producto.getNombre() + " EMPAQUETADO");
+        producto.setEstadoActual(Tasks.FINALIZADO);
+        //System.out.println(producto.getNombre() + " EMPAQUETADO");
+        producto.setProducto("empaquetado");
+        System.out.println(producto.getCadena());
         contador++;
         if (contador == listaProductos.size()) {
             setTrabajoAcabado(true);
@@ -89,8 +102,8 @@ public class FactoryList {
     }
 
     public void startWorkers() {
-        new WorkerList(this, Tasks.INICIANDO).start();
         new WorkerList(this, Tasks.CONSTRUIRBASE).start();
         new WorkerList(this, Tasks.ENSAMBLACOMPONENTES).start();
+        new WorkerList(this, Tasks.EMPAQUETAELPRODUCTO).start();
     }
 }
