@@ -16,7 +16,7 @@ public class WorkerList extends Thread{
     public void run() {
         while (!factory.isTrabajoAcabado()) {
 
-            if(Tasks.CONSTRUIRBASE == task && FactoryList.getTotal() == FactoryList.getContadorBase()) break;
+            //if(Tasks.CONSTRUIRBASE == task && FactoryList.getTotal() == FactoryList.getContadorBase()) break;
 
             ProductoLista producto = factory.getProducto(task);
             if (producto != null) {

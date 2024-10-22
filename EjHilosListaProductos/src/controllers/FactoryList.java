@@ -22,19 +22,12 @@ public class FactoryList {
         return total;
     }
 
-    public static void setTotal(int total) {
-        FactoryList.total = total;
-    }
-
     public static int getContadorBase() {
         return contadorBase;
     }
 
-    public static void setContadorBase(int contadorBase) {
-        FactoryList.contadorBase = contadorBase;
-    }
-
     public synchronized ProductoLista getProducto(Tasks task) {
+
         if(isTrabajoAcabado()){
             notifyAll();
             return null;
@@ -45,6 +38,7 @@ public class FactoryList {
                 wait();
                 if(isTrabajoAcabado()){
                     notifyAll();
+                    return null;
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
