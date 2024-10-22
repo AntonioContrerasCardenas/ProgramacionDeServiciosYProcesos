@@ -10,28 +10,12 @@ public class FactoryList {
     private final List<ProductoLista> listaProductos;
     private boolean isTrabajoAcabado = false;
     private static int contador = 0;
-    private static int contadorBase = 0;
-    private static int total = 0;
 
     public FactoryList(List<ProductoLista> listaProductos) {
         this.listaProductos = listaProductos;
-        total = listaProductos.size();
-    }
-
-    public static int getTotal() {
-        return total;
-    }
-
-    public static int getContadorBase() {
-        return contadorBase;
     }
 
     public synchronized ProductoLista getProducto(Tasks task) {
-
-        if(isTrabajoAcabado()){
-            notifyAll();
-            return null;
-        }
 
         while(!hayProductoConTarea(task)){
             try {
@@ -55,10 +39,6 @@ public class FactoryList {
     }
 
     private boolean hayProductoConTarea(Tasks task) {
-        if(isTrabajoAcabado()){
-            notifyAll();
-            return false;
-        }
         for (ProductoLista producto : listaProductos) {
             if (producto.getEstadoActual() == task) {
                 return true;
@@ -67,36 +47,29 @@ public class FactoryList {
         return false;
     }
 
-    public synchronized void avanzarTarea(ProductoLista producto) {
+    public synchronized void avanzarTarea() {
         notifyAll();
     }
 
     public void construyeBase(ProductoLista producto) {
         sleep();
-        producto.setBaseConstruida(true);
         producto.setEstadoActual(Tasks.ENSAMBLACOMPONENTES);
         producto.setProducto("construido");
-        contadorBase++;
-        //System.out.println(producto.getNombre() + " con base construida");
         System.out.println(producto.getCadena());
-        avanzarTarea(producto);
+        avanzarTarea();
     }
 
     public void ensamblaComponente(ProductoLista producto) {
         sleep();
-        producto.setEnsamble(true);
         producto.setEstadoActual(Tasks.EMPAQUETAELPRODUCTO);
         producto.setProducto("ensamblado");
-        //System.out.println(producto.getNombre() + " con componentes ensamblados");
         System.out.println(producto.getCadena());
-        avanzarTarea(producto);
+        avanzarTarea();
     }
 
     public synchronized void empaquetaProducto(ProductoLista producto) {
         sleep();
-        producto.setEmpaquetado(true);
         producto.setEstadoActual(Tasks.FINALIZADO);
-        //System.out.println(producto.getNombre() + " EMPAQUETADO");
         producto.setProducto("empaquetado");
         System.out.println(producto.getCadena());
         contador++;
