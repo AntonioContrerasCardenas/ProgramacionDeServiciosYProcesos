@@ -13,6 +13,7 @@ public class FactoryList {
 
     public FactoryList(List<ProductoLista> listaProductos) {
         this.listaProductos = listaProductos;
+        listaProductos.stream().forEach(System.out::println);
     }
 
     public synchronized ProductoLista getProducto(Tasks task) {
