@@ -15,13 +15,13 @@ public class Pabellon {
         }
     }
 
-    public int numAsientos(){
+    public int numAsientos() {
         return asientos.size();
     }
 
     public boolean reservaAsientos(int inicio, int numAsientos, Usuario usuario) {
         for (int i = inicio; i < inicio + numAsientos; i++) {
-            if(i > asientos.size() || asientos.get(i).isReservado()){
+            if (i > asientos.size() || asientos.get(i).isReservado()) {
                 return false;
             }
         }
@@ -36,10 +36,24 @@ public class Pabellon {
     public void mostrarAsientosReservados() {
         for (Asiento asiento : asientos) {
             if (asiento.isReservado()) {
-                System.out.println(asiento.getUsuarioAReservar().getNombre());
-            }else {
-                System.out.println("Vacio");
+                System.out.print(asiento.getUsuarioAReservar().getNombre());
+            } else {
+                System.out.print("Vacio");
             }
         }
+
+        System.out.println();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Asiento> getAsientosDisponibles() {
+        return asientos.stream().filter(a -> !a.isReservado()).toList();
     }
 }

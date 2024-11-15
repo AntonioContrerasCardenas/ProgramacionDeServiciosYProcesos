@@ -1,13 +1,27 @@
 import models.Pabellon;
 import models.Usuario;
+import services.CompraService;
+import utils.Logger;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         int numAsientos = 20;
-        Pabellon pabellon = new Pabellon(1, numAsientos);
 
-        int numeroReserva = 5;
-        Usuario usuario = new Usuario("Juan", numeroReserva, pabellon);
-        usuario.resvera();
+        List<Pabellon> pabellons = List.of(new Pabellon(1, numAsientos), new Pabellon(2, numAsientos), new Pabellon(3, numAsientos));
+
+        CompraService compraService = new CompraService(pabellons);
+
+        List<Usuario> usuarios = List.of(new Usuario("Juan", compraService), new Usuario("Pedro", compraService), new Usuario("Maria", compraService)
+                , new Usuario("Jose", compraService), new Usuario("Antonio", compraService));
+
+        for (Usuario usuario : usuarios) {
+            usuario.start();
+        }
+
+        compraService.mostrarAsientosReservados();
+
+        Logger.log("La aplicación ha finalizado.");
     }
 }
