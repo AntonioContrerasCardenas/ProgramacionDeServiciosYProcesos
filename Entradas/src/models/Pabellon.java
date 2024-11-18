@@ -34,11 +34,12 @@ public class Pabellon {
     }
 
     public void mostrarAsientosReservados() {
+        System.out.println("[Pabellón " + id + "]");
         for (Asiento asiento : asientos) {
             if (asiento.isReservado()) {
-                System.out.print(asiento.getUsuarioAReservar().getNombre());
+                System.out.print(asiento.getId() + ":" + asiento.getUsuarioAReservar().getNombre().toUpperCase() + " ");
             } else {
-                System.out.print("Vacio");
+                System.out.print(asiento.getId() + ":- ");
             }
         }
 
@@ -55,5 +56,9 @@ public class Pabellon {
 
     public List<Asiento> getAsientosDisponibles() {
         return asientos.stream().filter(a -> !a.isReservado()).toList();
+    }
+
+    public void liberaAsientos(Usuario usuario) {
+        asientos.stream().filter(a -> a.getUsuarioAReservar() == usuario).forEach(Asiento::cancelaReserva);
     }
 }

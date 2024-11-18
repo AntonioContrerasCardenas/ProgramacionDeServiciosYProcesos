@@ -6,9 +6,11 @@ import models.Usuario;
 import utils.Logger;
 
 import java.util.List;
+import java.util.Random;
 
 public class CompraService {
     List<Pabellon> pabellones;
+    private static final Random random = new Random();
 
     public CompraService(List<Pabellon> pabellones) {
         this.pabellones = pabellones;
@@ -20,14 +22,21 @@ public class CompraService {
             Logger.log("CompraService: intentando reservar " + numAsientos + " asientos en pabellon " + pabellon.getId());
             List<Asiento> asientosDisponibles = pabellon.getAsientosDisponibles();
             if (asientosDisponibles.size() >= numAsientos) {
-                Logger.log("CompraService: se han encontrado " + numAsientos + " asientos disponibles en pabellon " + pabellon.getId());
-                if (pabellon.reservaAsientos(0, numAsientos, usuario)) {
-                    Logger.log("CompraService: se han reservado " + numAsientos + " asientos en pabellon " + pabellon.getId());
+                Logger.log("CompraService: se han encontrado " + numAsientos + " asientos disponibles en pabellon " + pabellon.getId() + " para " + usuario.getNombre());
+                int inicio = random.nextInt(asientosDisponibles.size() - numAsientos);
+                if (pabellon.reservaAsientos(inicio, numAsientos, usuario)) {
+                    //Logger.log("CompraService: se han reservado " + numAsientos + " asientos en pabellon " + pabellon.getId());
                     Logger.log("CompraService : Procedemos al pago de " + usuario.getNombre());
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
+                    }
+
+                    if (random.nextInt(5) == 0) {
+                        Logger.log("CompraService : Pago fallido de " + usuario.getNombre());
+                        pabellon.liberaAsientos(usuario);
+                        return false;
                     }
                     Logger.log("CompraService : Pago completado de " + usuario.getNombre());
                     return true;
