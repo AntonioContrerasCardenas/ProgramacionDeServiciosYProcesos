@@ -19,7 +19,7 @@ public class Pabellon {
         return asientos.size();
     }
 
-    public boolean reservaAsientos(int inicio, int numAsientos, Usuario usuario) {
+    public synchronized boolean reservaAsientos(int inicio, int numAsientos, Usuario usuario) {
         for (int i = inicio; i < inicio + numAsientos; i++) {
             if (i > asientos.size() || asientos.get(i).isReservado()) {
                 return false;
@@ -33,8 +33,8 @@ public class Pabellon {
         return true;
     }
 
-    public void mostrarAsientosReservados() {
-        System.out.println("[Pabellón " + id + "]");
+    public synchronized void mostrarAsientosReservados() {
+        System.out.println("(Pabellon " + id + ")");
         for (Asiento asiento : asientos) {
             if (asiento.isReservado()) {
                 System.out.print(asiento.getId() + ":" + asiento.getUsuarioAReservar().getNombre().toUpperCase() + " ");
@@ -54,11 +54,11 @@ public class Pabellon {
         this.id = id;
     }
 
-    public List<Asiento> getAsientosDisponibles() {
+    public synchronized List<Asiento> getAsientosDisponibles() {
         return asientos.stream().filter(a -> !a.isReservado()).toList();
     }
 
-    public void liberaAsientos(Usuario usuario) {
+    public synchronized void liberaAsientos(Usuario usuario) {
         asientos.stream().filter(a -> a.getUsuarioAReservar() == usuario).forEach(Asiento::cancelaReserva);
     }
 }

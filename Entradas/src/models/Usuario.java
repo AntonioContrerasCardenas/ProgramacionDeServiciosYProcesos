@@ -10,7 +10,7 @@ public class Usuario extends Thread {
     private final int numAsientos;
     private static final int numeroIntentos = 3;
     private final Random random;
-    private CompraService compraService;
+    private final CompraService compraService;
 
     public Usuario(String nombre, int numAsientos, CompraService compraService) {
         this.nombre = nombre;
@@ -26,14 +26,17 @@ public class Usuario extends Thread {
         this.numAsientos = random.nextInt(4) + 1;
     }
 
+
     @Override
-    public void start() {
+    public void run() {
         boolean reservado = false;
         int intentos = 0;
 
-        while (!reservado && intentos < numeroIntentos) {
-            Logger.log(nombre + " intenta reservar entradas.");
+        Logger.log(nombre + " intenta reservar entradas.");
 
+        while (!reservado && intentos < numeroIntentos) {
+            //Logger.log(nombre + " intenta reservar entradas.");
+            //Logger.log("Usuario " + this.nombre + " iniciado desde log");
             reservado = compraService.reservaAsientos(numAsientos, this);
             if (reservado) {
                 Logger.log(nombre + " ha reservado " + numAsientos + " asientos.");
