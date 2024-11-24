@@ -9,7 +9,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        List<Producto> listaProductos = new ArrayList<Producto>();
+        List<Producto> listaProductos = new ArrayList<>();
         listaProductos.add(new Producto("Producto 1"));
         listaProductos.add(new Producto("Producto 2"));
         listaProductos.add(new Producto("Producto 3"));

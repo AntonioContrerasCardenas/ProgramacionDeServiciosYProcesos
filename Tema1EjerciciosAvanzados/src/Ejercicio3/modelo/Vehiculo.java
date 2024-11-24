@@ -1,7 +1,5 @@
 package Ejercicio3.modelo;
 
-import java.util.Comparator;
-
 public class Vehiculo extends Thread implements Comparable<Vehiculo> {
 
     private static final int DISTANCIA_RECORRER = 120;
@@ -10,7 +8,7 @@ public class Vehiculo extends Thread implements Comparable<Vehiculo> {
     private static final int DISTANCIASUMAR = 10;
     private boolean averiado = false;
 
-    public Vehiculo(String name, int velocidad){
+    public Vehiculo(String name, int velocidad) {
         super(name);
         this.velocidad = velocidad;
     }
@@ -18,22 +16,13 @@ public class Vehiculo extends Thread implements Comparable<Vehiculo> {
     @Override
     public void run() {
         System.out.println(getName() + " empezando a correr...");
-        while(distanciaRecorrida < DISTANCIA_RECORRER){
+        while (distanciaRecorrida < DISTANCIA_RECORRER) {
             try {
                 sleep(velocidad);
-                System.out.println(getName() + ", lleva recorrido " + distanciaRecorrida +"m");
+                System.out.println(getName() + ", lleva recorrido " + distanciaRecorrida + "m");
                 distanciaRecorrida += DISTANCIASUMAR;
             } catch (InterruptedException e) {
-//                if (!averiado){
-//                    averiado = true;
-//                    System.out.println("Se averia el vehiculo " + getName());
-//                }else{
-//                    System.out.println("Se repara el vehiculo " + getName());
-//                    averiado = false;
-//                }
                 accidenteVehiculo();
-
-
             }
         }
 

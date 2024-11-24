@@ -13,15 +13,17 @@ public class FactoryList {
 
     public FactoryList(List<ProductoLista> listaProductos) {
         this.listaProductos = listaProductos;
-        listaProductos.stream().forEach(System.out::println);
+        for (ProductoLista p : listaProductos) p.getEstadoActual();
     }
 
     public synchronized ProductoLista getProducto(Tasks task) {
 
-        while(!hayProductoConTarea(task)){
+        System.out.println("Entrando en getProducto" + task + " y hay " + hayProductoConTarea(task));
+
+        while (!hayProductoConTarea(task)) {
             try {
                 wait();
-                if(isTrabajoAcabado()){
+                if (isTrabajoAcabado()) {
                     notifyAll();
                     return null;
                 }

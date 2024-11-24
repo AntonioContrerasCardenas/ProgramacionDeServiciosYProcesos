@@ -1,6 +1,6 @@
 package Ejercicio1;
 
-public class Hilo extends Thread{
+public class Hilo extends Thread {
 
     @Override
     public void run() {
@@ -8,7 +8,7 @@ public class Hilo extends Thread{
             System.out.println(i);
             try {
                 Thread.sleep(500);
-            } catch (Exception e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }

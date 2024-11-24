@@ -5,9 +5,11 @@
       <module fileurl="file://$PROJECT_DIR$/EjHilosListaProductos/EjHilosListaProductos.iml" filepath="$PROJECT_DIR$/EjHilosListaProductos/EjHilosListaProductos.iml" />
       <module fileurl="file://$PROJECT_DIR$/Entradas/Entradas.iml" filepath="$PROJECT_DIR$/Entradas/Entradas.iml" />
       <module fileurl="file://$PROJECT_DIR$/HiloEjemplos/HiloEjemplos.iml" filepath="$PROJECT_DIR$/HiloEjemplos/HiloEjemplos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ParqueAtracciones/ParqueAtracciones.iml" filepath="$PROJECT_DIR$/ParqueAtracciones/ParqueAtracciones.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ProgramacionDeServiciosYProcesos.iml" filepath="$PROJECT_DIR$/.idea/ProgramacionDeServiciosYProcesos.iml" />
       <module fileurl="file://$PROJECT_DIR$/Tema1Ejercicios/Tema1Ejercicios.iml" filepath="$PROJECT_DIR$/Tema1Ejercicios/Tema1Ejercicios.iml" />
       <module fileurl="file://$PROJECT_DIR$/Tema1EjerciciosAvanzados/Tema1EjerciciosAvanzados.iml" filepath="$PROJECT_DIR$/Tema1EjerciciosAvanzados/Tema1EjerciciosAvanzados.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TraficoSemaforo/TraficoSemaforo.iml" filepath="$PROJECT_DIR$/TraficoSemaforo/TraficoSemaforo.iml" />
     </modules>
   </component>
 </project>

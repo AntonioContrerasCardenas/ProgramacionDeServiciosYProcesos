@@ -1,5 +1,6 @@
 package controllers;
 
+
 import classes.Producto;
 import classes.Workers;
 import enums.Tasks;
@@ -93,7 +94,7 @@ public class Factory {
         producto.setEstado("Producto empaquetado");
         System.out.println(producto.getNombre() + " EMPAQUETADO");
         contador++;
-        if(totalProductos == contador){
+        if (totalProductos == contador) {
             setTrabajoAcabado(true);
         }
     }
